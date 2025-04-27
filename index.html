@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #333;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        .cell.taken {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div id="gameStatus"></div>
+    <div class="board">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let gameOver = false;
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],  // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],  // columns
+                [0, 4, 8], [2, 4, 6]              // diagonals
+            ];
+
+            for (let pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+            return board.includes('') ? null : 'Tie';
+        }
+
+        function makeMove(index) {
+            if (board[index] || gameOver) return;
+
+            board[index] = currentPlayer;
+            document.querySelectorAll('.cell')[index].textContent = currentPlayer;
+            document.querySelectorAll('.cell')[index].classList.add('taken');
+
+            const winner = checkWinner();
+            if (winner) {
+                gameOver = true;
+                document.getElementById('gameStatus').textContent = winner === 'Tie' ? 'It\'s a tie!' : winner + ' wins!';
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+    </script>
+</body>
+</html>
